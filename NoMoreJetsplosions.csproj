@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>NoMoreJetsplosions</AssemblyName>
+    <Description>Prevents jetpack explosions</Description>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+
+    <SteamPath>$(MSBuildProgramFiles32)\Steam\steamapps\common\Lethal Company</SteamPath>
+    
+    <ProfileDefault>$(AppData)\Thunderstore Mod Manager\DataFolder\LethalCompany\profiles\Default\BepInEx</ProfileDefault>
+    <ProfileV72>$(AppData)\Thunderstore Mod Manager\DataFolder\LethalCompany\profiles\v72 sigma\BepInEx</ProfileV72>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath Condition="Exists('$(ProfileV72)')">$(ProfileV72)\core\BepInEx.dll</HintPath>
+      <HintPath Condition="!Exists('$(ProfileV72)')">$(ProfileDefault)\core\BepInEx.dll</HintPath>
+    </Reference>
+    
+    <Reference Include="0Harmony">
+      <HintPath Condition="Exists('$(ProfileV72)')">$(ProfileV72)\core\0Harmony.dll</HintPath>
+      <HintPath Condition="!Exists('$(ProfileV72)')">$(ProfileDefault)\core\0Harmony.dll</HintPath>
+    </Reference>
+
+    <Reference Include="Assembly-CSharp"><HintPath>$(SteamPath)\Lethal Company_Data\Managed\Assembly-CSharp.dll</HintPath></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(SteamPath)\Lethal Company_Data\Managed\UnityEngine.dll</HintPath></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(SteamPath)\Lethal Company_Data\Managed\UnityEngine.CoreModule.dll</HintPath></Reference>
+    
+    <Reference Include="UnityEngine.UI"><HintPath>$(SteamPath)\Lethal Company_Data\Managed\UnityEngine.UI.dll</HintPath></Reference>
+    <Reference Include="Unity.TextMeshPro"><HintPath>$(SteamPath)\Lethal Company_Data\Managed\Unity.TextMeshPro.dll</HintPath></Reference>
+    <Reference Include="Unity.Netcode.Runtime"><HintPath>$(SteamPath)\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll</HintPath></Reference>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <PropertyGroup>
+      <DeployDir Condition="Exists('$(ProfileV72)')">$(ProfileV72)\plugins\</DeployDir>
+      <DeployDir Condition="!Exists('$(ProfileV72)')">$(ProfileDefault)\plugins\</DeployDir>
+    </PropertyGroup>
+    
+    <Message Importance="high" Text="Auto-Deploying Jetsplosion to: $(DeployDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DeployDir)" />
+  </Target>
+
+</Project>
