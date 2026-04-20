@@ -1,6 +1,6 @@
 {
     "name": "NoMoreJetsplosions",
-    "version_number": "1.0.0",
+    "version_number": "1.0.1",
     "website_url": "https://github.com/Detologist/NoMoreJetsplosions",
     "description": "Jetpacks cannot explode midair, if you hit the ground its fair game pal.",
     "dependencies": [
